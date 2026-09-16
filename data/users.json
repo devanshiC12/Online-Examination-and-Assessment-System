@@ -1,0 +1,29 @@
+[
+  {
+    "id": "usr_teacher_1",
+    "name": "Prof. Alan Turing",
+    "email": "teacher@exam.com",
+    "password": "admin123",
+    "role": "teacher",
+    "department": "Computer Science & Engineering",
+    "createdAt": "2026-09-01T10:00:00.000Z"
+  },
+  {
+    "id": "usr_student_1",
+    "name": "Devanshi Patel",
+    "email": "student@exam.com",
+    "password": "student123",
+    "role": "student",
+    "rollNo": "CS-2024-042",
+    "createdAt": "2026-09-02T11:00:00.000Z"
+  },
+  {
+    "id": "usr_student_2",
+    "name": "Alex Johnson",
+    "email": "alex@exam.com",
+    "password": "alex123",
+    "role": "student",
+    "rollNo": "CS-2024-018",
+    "createdAt": "2026-09-03T09:30:00.000Z"
+  }
+]

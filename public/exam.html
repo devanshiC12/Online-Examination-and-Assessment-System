@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Examination Room - Examify</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/exam.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="exam-mode">
+
+  <!-- Sticky Exam Top Proctor Bar -->
+  <header class="exam-navbar">
+    <div class="container exam-nav-content">
+      <div class="exam-brand-info">
+        <div class="brand-icon" style="width: 2rem; height: 2rem; font-size: 1.1rem;">🎓</div>
+        <div class="exam-title-wrap">
+          <h2 id="examTopTitle">Loading Assessment...</h2>
+          <div>
+            <span class="badge badge-purple" id="examCategoryBadge" style="font-size: 0.725rem;">General</span>
+            <span style="font-size: 0.8rem; margin-left: 0.5rem; color: var(--text-muted);">
+              Candidate: <strong id="studentDisplayName">Student</strong> (<span id="studentDisplayRoll">Roll</span>)
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Real-time Countdown Timer -->
+      <div class="exam-timer-wrap" id="timerWrap">
+        <span>⏱️</span>
+        <span id="examTimer">00:00</span>
+      </div>
+
+      <!-- Anti-Cheat Strike Badge & Actions -->
+      <div class="exam-proctor-badges">
+        <div class="strike-badge" id="strikeCounterBadge">
+          🛡️ Strikes: <strong>0/3</strong>
+        </div>
+        <button class="btn btn-secondary btn-sm" onclick="toggleFullScreen()" title="Toggle Fullscreen">
+          ⛶ Fullscreen
+        </button>
+        <button class="btn btn-danger btn-sm" onclick="openSubmitConfirmationModal()">
+          Finish &amp; Submit
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Proctored Exam Layout -->
+  <main class="container exam-main-container">
+    
+    <!-- LEFT: Question Area -->
+    <section class="question-panel">
+      <div class="question-meta-bar">
+        <div class="question-number" id="questionIndexText">Question 1 of ...</div>
+        <div class="question-marks" id="questionPointsBadge">2 Marks</div>
+      </div>
+
+      <!-- Question Text Body -->
+      <div class="question-text" id="questionBodyText">
+        Loading question statement...
+      </div>
+
+      <!-- Options List -->
+      <div class="options-list" id="questionOptionsContainer">
+        <!-- Radio/Checkbox options rendered dynamically -->
+      </div>
+
+      <!-- Bottom Question Navigation Buttons -->
+      <div class="question-actions-bar">
+        <div class="actions-left">
+          <button class="btn btn-secondary" id="prevQuestionBtn" onclick="prevQuestion()" disabled>
+            ← Previous
+          </button>
+          <button class="btn btn-secondary" onclick="clearResponse()">
+            Clear Response
+          </button>
+        </div>
+
+        <div class="actions-right">
+          <button class="btn btn-secondary" style="border-color: var(--warning); color: #b45309;" onclick="markForReview()">
+            ⭐ Mark for Review
+          </button>
+          <button class="btn btn-primary" id="nextQuestionBtn" onclick="nextQuestion()">
+            Next Question →
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT: Question Palette Sidebar -->
+    <aside class="palette-sidebar">
+      <h3 class="palette-title">Question Palette</h3>
+
+      <!-- Status Legend -->
+      <div class="legend-grid">
+        <div class="legend-item">
+          <div class="legend-dot dot-answered"></div>
+          <span>Answered</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot dot-review"></div>
+          <span>Marked Review</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot dot-ans-review"></div>
+          <span>Ans &amp; Review</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot dot-not-answered"></div>
+          <span>Not Answered</span>
+        </div>
+        <div class="legend-item" style="grid-column: 1 / -1;">
+          <div class="legend-dot dot-not-visited"></div>
+          <span>Not Visited</span>
+        </div>
+      </div>
+
+      <!-- Clickable Question Number Grid -->
+      <div class="palette-grid" id="questionPaletteGrid">
+        <!-- Injected dynamically by exam.js -->
+      </div>
+
+      <!-- Palette Summary Box -->
+      <div class="palette-summary-card">
+        <div class="summary-row">
+          <span>Answered:</span>
+          <strong id="sumAnswered" style="color: var(--success);">0</strong>
+        </div>
+        <div class="summary-row">
+          <span>Marked for Review:</span>
+          <strong id="sumReview" style="color: var(--warning);">0</strong>
+        </div>
+        <div class="summary-row">
+          <span>Unanswered:</span>
+          <strong id="sumUnanswered" style="color: var(--danger);">0</strong>
+        </div>
+      </div>
+
+      <div style="margin-top: 1rem;">
+        <button class="btn btn-primary btn-block" onclick="openSubmitConfirmationModal()">
+          Submit Assessment
+        </button>
+      </div>
+    </aside>
+  </main>
+
+  <!-- MODAL: Strike / Anti-Cheating Warning Alert -->
+  <div class="modal-backdrop" id="strikeWarningModal">
+    <div class="modal-dialog" style="max-width: 500px;">
+      <div class="modal-header" style="background: #fef2f2; border-bottom-color: #fee2e2;">
+        <h2 class="modal-title" style="color: #b91c1c; display: flex; align-items: center; gap: 0.5rem;">
+          <span>⚠️</span> Anti-Cheating Violation Warning
+        </h2>
+      </div>
+      <div class="modal-body">
+        <p style="font-weight: 600; font-size: 1.05rem; margin-bottom: 0.75rem; color: #1e293b;" id="strikeWarningReason">
+          Tab switch or window blur detected!
+        </p>
+        <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1.25rem;">
+          You have recorded strike <strong id="strikeWarningCount" style="color: #b91c1c; font-size: 1.1rem;">1 of 3</strong>.
+          Leaving the exam screen is strictly monitored. Reaching <strong>3 strikes</strong> will automatically terminate and disqualify your exam.
+        </p>
+        <div style="background: #fff1f2; padding: 0.75rem; border-radius: 6px; border: 1px solid #fecdd3; font-size: 0.85rem; color: #9f1239;">
+          Please remain in fullscreen and keep this window active until you complete the assessment.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger btn-block" onclick="closeStrikeModal()">
+          I Understand &amp; Return to Exam
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Submit Confirmation Summary -->
+  <div class="modal-backdrop" id="submitConfirmModal">
+    <div class="modal-dialog" style="max-width: 520px;">
+      <div class="modal-header">
+        <h2 class="modal-title">Confirm Final Submission</h2>
+        <button class="modal-close" onclick="closeSubmitConfirmModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="color: var(--text-muted); margin-bottom: 1.25rem;">
+          Are you sure you want to finish and submit your assessment? You will not be able to modify your answers after this.
+        </p>
+
+        <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 8px; padding: 1.25rem; margin-bottom: 1rem;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+            <span>Total Questions:</span>
+            <strong id="confirmTotalQuestions">0</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; color: var(--success);">
+            <span>Questions Answered:</span>
+            <strong id="confirmAnsweredQuestions">0</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; color: var(--danger);">
+            <span>Unanswered Questions:</span>
+            <strong id="confirmUnansweredQuestions">0</strong>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeSubmitConfirmModal()">Keep Working</button>
+        <button class="btn btn-success btn-lg" onclick="submitExam(false)">
+          Yes, Submit Assessment
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/exam.js"></script>
+</body>
+</html>

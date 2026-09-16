@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Examination & Assessment System</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <div class="brand">
+        <div class="brand-icon">🎓</div>
+        <span>Examify</span>
+      </div>
+      <div class="nav-links" id="navUserSection">
+        <!-- Will be populated dynamically by auth.js if already logged in -->
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <main class="container">
+    <section class="hero">
+      <div class="hero-tag">⚡ Next-Gen Assessment Platform</div>
+      <h1 class="hero-title">Online Examination &amp; <br><span>Assessment System</span></h1>
+      <p class="hero-subtitle">
+        A seamless, proctored digital assessment environment for educators and students. 
+        Featuring real-time countdown timers, tab-switch detection, instant grading, and performance analytics.
+      </p>
+
+      <!-- Authentication Card -->
+      <div class="auth-wrapper">
+        <div class="auth-tabs">
+          <div class="auth-tab active" id="tabLoginBtn" onclick="switchAuthTab('login')">Sign In</div>
+          <div class="auth-tab" id="tabRegisterBtn" onclick="switchAuthTab('register')">Register</div>
+        </div>
+
+        <!-- Login Form -->
+        <form id="loginForm" onsubmit="handleLoginSubmit(event)">
+          <div class="form-group">
+            <label class="form-label" for="loginEmail">Email Address</label>
+            <input type="email" id="loginEmail" class="form-input" placeholder="e.g. student@exam.com" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="loginPassword">Password</label>
+            <input type="password" id="loginPassword" class="form-input" placeholder="••••••••" required>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block btn-lg" id="loginSubmitBtn">Sign In to Portal</button>
+        </form>
+
+        <!-- Register Form (Hidden by default) -->
+        <form id="registerForm" style="display: none;" onsubmit="handleRegisterSubmit(event)">
+          <div class="form-group">
+            <label class="form-label" for="regName">Full Name</label>
+            <input type="text" id="regName" class="form-input" placeholder="e.g. John Doe" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="regEmail">Email Address</label>
+            <input type="email" id="regEmail" class="form-input" placeholder="e.g. john@exam.com" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="regPassword">Password</label>
+            <input type="password" id="regPassword" class="form-input" placeholder="Create password" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="regRole">I am a</label>
+            <select id="regRole" class="form-select" onchange="toggleRoleFields(this.value)">
+              <option value="student">Student / Candidate</option>
+              <option value="teacher">Teacher / Instructor</option>
+            </select>
+          </div>
+          <div class="form-group" id="regRollGroup">
+            <label class="form-label" for="regRoll">Roll Number / Student ID</label>
+            <input type="text" id="regRoll" class="form-input" placeholder="e.g. CS-2024-099">
+          </div>
+          <div class="form-group" id="regDeptGroup" style="display: none;">
+            <label class="form-label" for="regDept">Department</label>
+            <input type="text" id="regDept" class="form-input" placeholder="e.g. Computer Science">
+          </div>
+          <button type="submit" class="btn btn-primary btn-block btn-lg" id="regSubmitBtn">Create Account</button>
+        </form>
+
+        <!-- 1-Click Quick Demo Login Section -->
+        <div class="demo-login-box">
+          <div class="demo-title">⚡ 1-Click Demo Logins</div>
+          <div class="demo-btns">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="Auth.quickDemoLogin('teacher')">
+              👨‍🏫 Teacher Demo
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="Auth.quickDemoLogin('student')">
+              👩‍🎓 Student Demo
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Platform Highlights Grid -->
+    <section class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon" style="background: #eef2ff; color: #4f46e5;">⏱️</div>
+        <h3 class="feature-title">Timed Examination</h3>
+        <p class="feature-desc">
+          Precision countdown timer with visual warning thresholds and automatic submission upon timeout.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon" style="background: #ecfdf5; color: #10b981;">🛡️</div>
+        <h3 class="feature-title">Anti-Cheat Proctoring</h3>
+        <p class="feature-desc">
+          Monitors tab-switching, prevents copy/paste shortcuts, and warns candidates with strict strike enforcement.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon" style="background: #fffbeb; color: #f59e0b;">📊</div>
+        <h3 class="feature-title">Instant Automated Grading</h3>
+        <p class="feature-desc">
+          Instant evaluation upon test submission with question-by-question breakdown, explanations, and scorecards.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon" style="background: #f5f3ff; color: #8b5cf6;">🗂️</div>
+        <h3 class="feature-title">Instructor Assessment Suite</h3>
+        <p class="feature-desc">
+          Dynamic question builder, student performance analytics, question bank management, and CSV result export.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = Auth.getCurrentUser();
+      if (user) {
+        Auth.renderNavbarUser(user);
+        // Add a quick button to go to dashboard
+        const nav = document.getElementById('navUserSection');
+        if (nav) {
+          const dashLink = document.createElement('a');
+          dashLink.href = user.role === 'teacher' ? 'teacher-dashboard.html' : 'student-dashboard.html';
+          dashLink.className = 'btn btn-primary btn-sm';
+          dashLink.textContent = 'Go to Dashboard →';
+          nav.prepend(dashLink);
+        }
+      }
+    });
+
+    function switchAuthTab(tab) {
+      const loginTab = document.getElementById('tabLoginBtn');
+      const regTab = document.getElementById('tabRegisterBtn');
+      const loginForm = document.getElementById('loginForm');
+      const regForm = document.getElementById('registerForm');
+
+      if (tab === 'login') {
+        loginTab.classList.add('active');
+        regTab.classList.remove('active');
+        loginForm.style.display = 'block';
+        regForm.style.display = 'none';
+      } else {
+        regTab.classList.add('active');
+        loginTab.classList.remove('active');
+        loginForm.style.display = 'none';
+        regForm.style.display = 'block';
+      }
+    }
+
+    function toggleRoleFields(role) {
+      const rollGroup = document.getElementById('regRollGroup');
+      const deptGroup = document.getElementById('regDeptGroup');
+      if (role === 'teacher') {
+        rollGroup.style.display = 'none';
+        deptGroup.style.display = 'block';
+      } else {
+        rollGroup.style.display = 'block';
+        deptGroup.style.display = 'none';
+      }
+    }
+
+    async function handleLoginSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value;
+      const pass = document.getElementById('loginPassword').value;
+
+      const res = await Auth.login(email, pass, true);
+      if (res.success) {
+        showToast('Login successful! Redirecting...', 'success');
+        setTimeout(() => Auth.redirectByRole(res.user.role), 500);
+      } else {
+        showToast(res.message || 'Invalid email or password', 'error');
+      }
+    }
+
+    async function handleRegisterSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('regName').value;
+      const email = document.getElementById('regEmail').value;
+      const password = document.getElementById('regPassword').value;
+      const role = document.getElementById('regRole').value;
+      const rollNo = document.getElementById('regRoll').value;
+      const department = document.getElementById('regDept').value;
+
+      const res = await Auth.register({ name, email, password, role, rollNo, department });
+      if (res.success) {
+        showToast('Account created successfully!', 'success');
+        setTimeout(() => Auth.redirectByRole(res.user.role), 500);
+      } else {
+        showToast(res.message || 'Registration failed', 'error');
+      }
+    }
+  </script>
+</body>
+</html>

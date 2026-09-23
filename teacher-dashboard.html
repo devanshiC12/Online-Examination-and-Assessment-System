@@ -24,7 +24,6 @@
   </nav>
 
   <main class="container">
-    <!-- Header Row -->
     <header class="dashboard-header">
       <div class="welcome-row">
         <div class="welcome-text">
@@ -71,7 +70,6 @@
       </div>
     </section>
 
-    <!-- Tabbed Navigation / Controls -->
     <div class="dashboard-controls">
       <div class="tab-nav">
         <button class="tab-btn active" id="btnTabExams">My Assessments</button>
@@ -93,14 +91,12 @@
       </div>
     </div>
 
-    <!-- Section 1: Assessments Cards Grid -->
     <section id="viewExamsSection">
       <div class="exam-grid" id="teacherExamsContainer">
         <!-- Rendered by teacher.js -->
       </div>
     </section>
 
-    <!-- Section 2: Student Submissions Table -->
     <section id="viewResultsSection" style="display: none;">
       <div class="table-container">
         <table class="custom-table">
@@ -117,14 +113,14 @@
             </tr>
           </thead>
           <tbody id="submissionsTableBody">
-            <!-- Rendered by teacher.js -->
+            
           </tbody>
         </table>
       </div>
     </section>
   </main>
 
-  <!-- MODAL 1: Create New Assessment Form -->
+  
   <div class="modal-backdrop" id="createExamModal">
     <div class="modal-dialog" style="max-width: 800px;">
       <div class="modal-header">
@@ -194,33 +190,5 @@
       </div>
     </div>
   </div>
-
-  <!-- Static preview: dashboard actions are intentionally disabled. -->
-  <!--
-    function switchTeacherView(view) {
-      const btnExams = document.getElementById('btnTabExams');
-      const btnResults = document.getElementById('btnTabResults');
-      const secExams = document.getElementById('viewExamsSection');
-      const secResults = document.getElementById('viewResultsSection');
-      const ctrlExams = document.getElementById('examsControls');
-      const ctrlResults = document.getElementById('resultsControls');
-
-      if (view === 'exams') {
-        btnExams.classList.add('active');
-        btnResults.classList.remove('active');
-        secExams.style.display = 'block';
-        secResults.style.display = 'none';
-        ctrlExams.style.display = 'flex';
-        ctrlResults.style.display = 'none';
-      } else {
-        btnResults.classList.add('active');
-        btnExams.classList.remove('active');
-        secExams.style.display = 'none';
-        secResults.style.display = 'block';
-        ctrlExams.style.display = 'none';
-        ctrlResults.style.display = 'flex';
-      }
-    }
-  -->
 </body>
 </html>

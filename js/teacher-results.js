@@ -1,6 +1,6 @@
 /* ==========================================================================
-   teacher-results.js — teacher-dashboard.html ka "Student Results" tab
-   Results table + CSV export (teacher.js ke saath load hota hai)
+   teacher-results.js — "Student Results" tab in teacher-dashboard.html
+   Results table + CSV export (loaded alongside teacher.js)
    ========================================================================== */
 (function () {
   'use strict';
@@ -16,7 +16,7 @@
 
     if (!rows.length) {
       body.innerHTML = '<tr><td colspan="8"><div class="empty-state"><div class="empty-state-icon">📭</div>' +
-        '<h3>No submissions yet</h3><p>Jab students exam denge, results yahan dikhenge.</p></div></td></tr>';
+        '<h3>No submissions yet</h3><p>Results will appear here after students take an exam.</p></div></td></tr>';
       return;
     }
 
@@ -36,9 +36,9 @@
 
   $('exportCsvBtn').addEventListener('click', function () {
     var rows = Store.resultsForTeacher(user.id);
-    if (!rows.length) return UI.toast('Export karne ke liye koi result nahi hai.', 'warning');
+    if (!rows.length) return UI.toast('There are no results to export.', 'warning');
 
-    var blob = new Blob(['\ufeff' + Store.toCSV(rows)], { type: 'text/csv;charset=utf-8;' }); // BOM: Excel me sahi khulta hai
+    var blob = new Blob(['\ufeff' + Store.toCSV(rows)], { type: 'text/csv;charset=utf-8;' }); // BOM: ensures correct display in Excel
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
     a.href = url;
@@ -47,9 +47,9 @@
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    UI.toast('CSV download ho gayi.', 'success');
+    UI.toast('CSV downloaded successfully.', 'success');
   });
 
-  $('btnTabResults').addEventListener('click', render); // tab khulte hi fresh data
+  $('btnTabResults').addEventListener('click', render); // Refresh the data whenever the tab opens.
   render();
 })();

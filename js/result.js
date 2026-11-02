@@ -1,11 +1,11 @@
 /* ==========================================================================
    result.js — result.html (scorecard + question-by-question review)
-   Student sirf apna result dekh sakta hai, teacher sirf apne exams ke results.
+   Students can only view their own results; teachers can only view results for their exams.
    ========================================================================== */
 (function () {
   'use strict';
 
-  var user = Store.requireRole(); // koi bhi logged-in role
+  var user = Store.requireRole(); // Any logged-in role.
   if (!user) return;
 
   var $ = function (id) { return document.getElementById(id); };
@@ -15,12 +15,12 @@
   var allowed = r && ((user.role === 'student' && r.userId === user.id) ||
                       (user.role === 'teacher' && r.teacherId === user.id));
   if (!allowed) {
-    UI.toast('Result nahi mila ya access allowed nahi hai.', 'error');
+    UI.toast('The result was not found or you do not have permission to access it.', 'error');
     setTimeout(function () { Store.go(Store.homeFor(user)); }, 900);
     return;
   }
 
-  // Back button role ke hisaab se
+  // Set the back button according to the user's role.
   var back = $('backDashboardBtn');
   back.href = Store.homeFor(user);
   back.textContent = user.role === 'teacher' ? '← Back to Teacher Dashboard' : '← Back to Student Dashboard';

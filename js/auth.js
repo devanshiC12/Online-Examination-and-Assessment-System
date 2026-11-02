@@ -4,7 +4,7 @@
 (function () {
   'use strict';
 
-  // Already logged in hai to seedha dashboard
+  // Redirect to the dashboard if the user is already logged in.
   var existing = Store.currentUser();
   if (existing) { Store.go(Store.homeFor(existing)); return; }
 
@@ -37,7 +37,7 @@
     $('loginEmail').value = 'teacher@demo.com'; $('loginPassword').value = 'teacher123'; clearError();
   });
 
-  // Teacher ke liye Roll Number nahi chahiye
+  // Teachers do not need a roll number.
   function toggleRoll() { $('rollGroup').style.display = $('regRole').value === 'student' ? '' : 'none'; }
   $('regRole').addEventListener('change', toggleRoll);
   toggleRoll();
@@ -47,7 +47,7 @@
     clearError();
     var email = $('loginEmail').value.trim();
     var password = $('loginPassword').value;
-    if (!email || !password) return showError('Email aur password dono daalo.');
+    if (!email || !password) return showError('Enter both your email and password.');
 
     var res = Store.login(email, password);
     if (!res.ok) return showError(res.error);
@@ -66,7 +66,7 @@
       password: $('regPassword').value
     });
     if (!res.ok) return showError(res.error);
-    UI.toast('Account ban gaya!', 'success');
+    UI.toast('Account created successfully!', 'success');
     Store.go(Store.homeFor(res.user));
   });
 })();

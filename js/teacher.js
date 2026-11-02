@@ -14,7 +14,7 @@
 
   $('instructorName').textContent = user.name;
 
-  /* ---------- stats (sirf is teacher ke exams / results) ---------- */
+  /* ---------- stats (only this teacher's exams / results) ---------- */
   function myExams() { return Store.getExams().filter(function (e) { return e.createdBy === user.id; }); }
 
   function renderStats() {
@@ -58,7 +58,7 @@
 
     if (!exams.length) {
       box.innerHTML = '<div class="empty-state" style="grid-column:1/-1;"><div class="empty-state-icon">📝</div>' +
-        '<h3>No assessments yet</h3><p>"Create New Assessment" dabake pehla exam banao.</p></div>';
+        '<h3>No assessments yet</h3><p>Click "Create New Assessment" to create your first exam.</p></div>';
       return;
     }
 
@@ -94,9 +94,9 @@
     if (viewBtn) openViewModal(viewBtn.getAttribute('data-view'));
     if (delBtn) {
       var exam = Store.getExam(delBtn.getAttribute('data-delete'));
-      if (exam && window.confirm('"' + exam.title + '" delete karna hai? Student results safe rahenge.')) {
+      if (exam && window.confirm('Are you sure you want to delete "' + exam.title + '"? Student results will be preserved.')) {
         Store.deleteExam(exam.id, user);
-        UI.toast('Assessment delete ho gaya.', 'success');
+        UI.toast('Assessment deleted successfully.', 'success');
         refreshAll();
       }
     }
@@ -145,12 +145,12 @@
       '<div class="question-item-header"><strong class="q-number">Question</strong>' +
       '<button type="button" class="btn btn-outline-danger btn-sm" data-remove>Remove</button></div>' +
       '<div class="form-group"><label class="form-label">Question *</label>' +
-      '<textarea class="form-textarea q-text" rows="2" placeholder="Question likho..."></textarea></div>' +
+      '<textarea class="form-textarea q-text" rows="2" placeholder="Enter your question..."></textarea></div>' +
       '<label class="form-label">Options * (radio = correct answer)</label>' +
       '<div class="options-builder">' + opts + '</div>' +
       '<div style="display:grid;grid-template-columns:1fr 3fr;gap:1rem;margin-top:.9rem;">' +
         '<div class="form-group"><label class="form-label">Marks</label><input type="number" class="form-input q-marks" value="2" min="1" max="20"></div>' +
-        '<div class="form-group"><label class="form-label">Explanation (optional)</label><input type="text" class="form-input q-explain" placeholder="Sahi answer kyun sahi hai"></div>' +
+        '<div class="form-group"><label class="form-label">Explanation (optional)</label><input type="text" class="form-input q-explain" placeholder="Why is this the correct answer?"></div>' +
       '</div>';
     $('questionsListContainer').appendChild(card);
     renumber();
@@ -162,7 +162,7 @@
     var rm = e.target.closest('[data-remove]');
     if (!rm) return;
     var cards = $('questionsListContainer').querySelectorAll('[data-q]');
-    if (cards.length <= 1) return UI.toast('Kam se kam 1 question zaroori hai.', 'warning');
+    if (cards.length <= 1) return UI.toast('At least one question is required.', 'warning');
     rm.closest('[data-q]').remove();
     renumber();
   });
@@ -185,16 +185,16 @@
       var options = Array.prototype.map.call(c.querySelectorAll('.q-opt'), function (o) { return o.value.trim(); });
       var checked = c.querySelector('input[type="radio"]:checked');
 
-      if (!text) return UI.toast('Question ' + (i + 1) + ' ka text khaali hai.', 'error');
-      if (options.some(function (o) { return !o; })) return UI.toast('Question ' + (i + 1) + ' ke chaaron options bharo.', 'error');
-      if (!checked) return UI.toast('Question ' + (i + 1) + ' ka correct answer select karo.', 'error');
+      if (!text) return UI.toast('Question ' + (i + 1) + ' is blank.', 'error');
+      if (options.some(function (o) { return !o; })) return UI.toast('Fill in all four options for question ' + (i + 1) + '.', 'error');
+      if (!checked) return UI.toast('Select the correct answer for question ' + (i + 1) + '.', 'error');
 
       questions.push({
         text: text, options: options, correct: Number(checked.value),
         marks: c.querySelector('.q-marks').value, explanation: c.querySelector('.q-explain').value
       });
     }
-    if (!questions.length) return UI.toast('Kam se kam 1 question add karo.', 'error');
+    if (!questions.length) return UI.toast('Add at least one question.', 'error');
 
     Store.createExam({
       title: $('examTitleInput').value,
@@ -206,7 +206,7 @@
     }, user);
 
     UI.closeModal('createExamModal');
-    UI.toast('Assessment publish ho gaya!', 'success');
+    UI.toast('Assessment published successfully!', 'success');
     refreshAll();
   });
 

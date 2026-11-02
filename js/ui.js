@@ -1,6 +1,6 @@
 /* ==========================================================================
    ui.js — Toast, modal, navbar (name + role + logout), formatters
-   Page load par modals wire ho jate hain aur #navUserSection bhar jata hai.
+   Modals are wired and #navUserSection is populated when the page loads.
    ========================================================================== */
 var UI = (function () {
   'use strict';
@@ -45,7 +45,7 @@ var UI = (function () {
         if (m) m.classList.remove('active');
         return;
       }
-      // backdrop par click -> band (data-static wale modal band nahi honge)
+      // Close the modal when its backdrop is clicked, except for data-static modals.
       if (e.target.classList && e.target.classList.contains('modal-backdrop') && !e.target.hasAttribute('data-static')) {
         e.target.classList.remove('active');
       }

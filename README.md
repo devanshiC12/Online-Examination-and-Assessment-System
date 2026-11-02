@@ -1,21 +1,30 @@
 # Online Examination & Assessment System (Examify)
 
-Ek complete front-end web app jisme **Teacher** exams banata hai aur **Student** timed, proctored exam deta hai.
-Data browser ke `localStorage` me save hota hai, isliye alag backend/database ki zarurat nahi.
+A complete front-end web app where **Teachers** create exams and **Students** take timed, proctored assessments.
+Data is stored in the browser's `localStorage`, so a separate backend or database is not required.
 
 ## Features
 - 🔐 Register / Login (Student & Teacher roles, page guards)
-- 👩‍🏫 Teacher: exam create (MCQ builder), view/delete, student results table, analytics, **CSV export**
+- 👩‍🏫 Teacher: create exams (MCQ builder), view/delete exams, student results table, analytics, **CSV export**
 - 🎓 Student: available exams, lobby/instructions, history & scorecards
 - ⏱️ Exam room: countdown timer, question palette, mark-for-review, auto-save, auto-submit
 - 🛡️ Anti-cheat: tab-switch/blur strikes (3 strikes = disqualified), copy/paste & right-click blocked
-- 📊 Auto evaluation + detailed scorecard with explanations, print/save as PDF
+- 📊 Automatic evaluation + detailed scorecard with explanations, print/save as PDF
 
-## Run karna
+## Contributors
+
+| Contributor |
+|-------------|
+| Dhruv Agrawal |
+| Deepti |
+| Devanshi Chauhan |
+| Devraj Rana |
+
+## Running the app
 ```bash
 git clone https://github.com/devanshiC12/Online-Examination-and-Assessment-System.git
 cd Online-Examination-and-Assessment-System
-# VS Code "Live Server" se index.html kholo  (ya)
+# Open index.html with VS Code Live Server (or)
 npx serve .        # / python -m http.server 5500
 ```
 
@@ -45,4 +54,4 @@ js/
   result.js             Scorecard logic                           [feature/result-page]
   teacher-results.js    Teacher results tab + CSV                 [feature/result-page]
 ```
-Team ka branch-wise kaam: **TEAM_PLAN.md** dekho.
+For the branch-by-branch team workflow, see **TEAM_PLAN.md**.

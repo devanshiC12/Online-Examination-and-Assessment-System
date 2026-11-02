@@ -1,8 +1,8 @@
 /* ==========================================================================
    store.js — Data layer (browser localStorage)
    Users, exams, results, session, in-progress attempt, auto-evaluation, CSV.
-   NOTE: Ye demo project hai. Password ka hash sirf obfuscation hai, real
-   security nahi — real project me backend + bcrypt use hoga.
+   NOTE: This is a demo project. The password hash is only obfuscation, not
+   real security — a production project should use a backend and bcrypt.
    ========================================================================== */
 var Store = (function () {
   'use strict';
@@ -29,7 +29,7 @@ var Store = (function () {
     for (var i = 0; i < str.length; i++) h = ((h << 5) + h + str.charCodeAt(i)) | 0;
     return String(h);
   }
-  function go(url) { window.location.replace(url); } // tests me override ho sakta hai
+  function go(url) { window.location.replace(url); } // Can be overridden in tests.
 
   /* ---------- seed (pehli baar demo data) ---------- */
   function seed() {
@@ -45,11 +45,11 @@ var Store = (function () {
         description: 'Basic HTML tags and CSS properties.',
         createdBy: 'u_teacher_demo', createdByName: 'Demo Teacher', createdAt: new Date().toISOString(),
         questions: [
-          { text: 'Which tag is used for the largest heading?', options: ['<h6>', '<head>', '<h1>', '<heading>'], correct: 2, marks: 2, explanation: '<h1> sabse bada heading level hai.' },
+          { text: 'Which tag is used for the largest heading?', options: ['<h6>', '<head>', '<h1>', '<heading>'], correct: 2, marks: 2, explanation: '<h1> is the largest heading level.' },
           { text: 'CSS stands for?', options: ['Creative Style System', 'Cascading Style Sheets', 'Computer Style Sheets', 'Colorful Style Syntax'], correct: 1, marks: 2, explanation: 'CSS = Cascading Style Sheets.' },
-          { text: 'Which CSS property changes the text color?', options: ['font-color', 'text-style', 'color', 'fg-color'], correct: 2, marks: 2, explanation: 'Text ka color `color` property se badalta hai.' },
-          { text: 'Which attribute gives an image its alternative text?', options: ['title', 'alt', 'src', 'caption'], correct: 1, marks: 2, explanation: '`alt` screen readers aur broken image ke liye hota hai.' },
-          { text: 'Which value of `display` makes an element a flex container?', options: ['block', 'inline', 'flex', 'grid-flex'], correct: 2, marks: 2, explanation: 'display: flex; se flex container banta hai.' }
+          { text: 'Which CSS property changes the text color?', options: ['font-color', 'text-style', 'color', 'fg-color'], correct: 2, marks: 2, explanation: 'The `color` property changes the text color.' },
+          { text: 'Which attribute gives an image its alternative text?', options: ['title', 'alt', 'src', 'caption'], correct: 1, marks: 2, explanation: '`alt` provides alternative text for screen readers and when an image fails to load.' },
+          { text: 'Which value of `display` makes an element a flex container?', options: ['block', 'inline', 'flex', 'grid-flex'], correct: 2, marks: 2, explanation: 'The `display: flex` declaration creates a flex container.' }
         ]
       },
       {
@@ -58,11 +58,11 @@ var Store = (function () {
         description: 'Variables, operators, arrays and browser storage.',
         createdBy: 'u_teacher_demo', createdByName: 'Demo Teacher', createdAt: new Date().toISOString(),
         questions: [
-          { text: 'Which keyword declares a block-scoped variable?', options: ['var', 'let', 'define', 'dim'], correct: 1, marks: 2, explanation: '`let` (aur `const`) block-scoped hote hain.' },
-          { text: 'What does `typeof null` return?', options: ['null', 'undefined', 'object', 'number'], correct: 2, marks: 2, explanation: 'JS ka famous quirk: typeof null === "object".' },
-          { text: 'Which method adds an element to the END of an array?', options: ['push()', 'pop()', 'shift()', 'unshift()'], correct: 0, marks: 2, explanation: 'push() end me add karta hai, pop() end se hatata hai.' },
-          { text: 'What does the `===` operator check?', options: ['Value only', 'Type only', 'Value and type', 'Reference only'], correct: 2, marks: 2, explanation: '=== strict equality: value + type dono.' },
-          { text: 'Which API keeps key-value data even after the browser is closed?', options: ['sessionStorage', 'localStorage', 'document.write', 'prompt()'], correct: 1, marks: 2, explanation: 'localStorage tab/browser band hone par bhi data rakhta hai.' }
+          { text: 'Which keyword declares a block-scoped variable?', options: ['var', 'let', 'define', 'dim'], correct: 1, marks: 2, explanation: '`let` and `const` are block-scoped.' },
+          { text: 'What does `typeof null` return?', options: ['null', 'undefined', 'object', 'number'], correct: 2, marks: 2, explanation: 'A well-known JavaScript quirk: `typeof null === "object"`.' },
+          { text: 'Which method adds an element to the END of an array?', options: ['push()', 'pop()', 'shift()', 'unshift()'], correct: 0, marks: 2, explanation: '`push()` adds an element to the end; `pop()` removes one from the end.' },
+          { text: 'What does the `===` operator check?', options: ['Value only', 'Type only', 'Value and type', 'Reference only'], correct: 2, marks: 2, explanation: '`===` performs strict equality, checking both value and type.' },
+          { text: 'Which API keeps key-value data even after the browser is closed?', options: ['sessionStorage', 'localStorage', 'document.write', 'prompt()'], correct: 1, marks: 2, explanation: '`localStorage` retains data even after the tab or browser is closed.' }
         ]
       }
     ]);
@@ -82,14 +82,14 @@ var Store = (function () {
     var roll = (data.roll || '').trim();
     var password = data.password || '';
 
-    if (!name) return { ok: false, error: 'Full name required hai.' };
-    if (!/^\S+@\S+\.\S+$/.test(email)) return { ok: false, error: 'Valid email daalo.' };
-    if (role === 'student' && !roll) return { ok: false, error: 'Student ke liye Roll Number required hai.' };
-    if (password.length < 6) return { ok: false, error: 'Password kam se kam 6 characters ka hona chahiye.' };
+    if (!name) return { ok: false, error: 'Full name is required.' };
+    if (!/^\S+@\S+\.\S+$/.test(email)) return { ok: false, error: 'Enter a valid email address.' };
+    if (role === 'student' && !roll) return { ok: false, error: 'A roll number is required for students.' };
+    if (password.length < 6) return { ok: false, error: 'The password must be at least 6 characters long.' };
 
     var users = getUsers();
     if (users.some(function (u) { return u.email === email; })) {
-      return { ok: false, error: 'Is email se account pehle se hai. Login karo.' };
+      return { ok: false, error: 'An account with this email already exists. Please log in.' };
     }
     var user = { id: uid('u'), name: name, email: email, role: role, roll: role === 'student' ? roll : '', password: hash(password) };
     users.push(user);
@@ -101,7 +101,7 @@ var Store = (function () {
   function login(email, password) {
     email = (email || '').trim().toLowerCase();
     var user = getUsers().filter(function (u) { return u.email === email && u.password === hash(password || ''); })[0];
-    if (!user) return { ok: false, error: 'Email ya password galat hai.' };
+    if (!user) return { ok: false, error: 'The email or password is incorrect.' };
     localStorage.setItem(KEY.session, user.id);
     return { ok: true, user: publicUser(user) };
   }
@@ -119,7 +119,7 @@ var Store = (function () {
     return user && user.role === 'teacher' ? 'teacher-dashboard.html' : 'student-dashboard.html';
   }
 
-  // Page guard: login nahi hai -> login page; galat role -> apna dashboard
+  // Page guard: redirect logged-out users to login and users with the wrong role to their dashboard.
   function requireRole(role) {
     var user = currentUser();
     if (!user) { api.go('login.html'); return null; }
@@ -170,7 +170,7 @@ var Store = (function () {
     return true;
   }
 
-  /* ---------- in-progress attempt (refresh par timer reset nahi hota) ---------- */
+  /* ---------- in-progress attempt (timer does not reset on refresh) ---------- */
   function getAttempt(userId) { return read(KEY.attempt + userId, null); }
   function saveAttempt(attempt) { write(KEY.attempt + attempt.userId, attempt); }
   function clearAttempt(userId) { localStorage.removeItem(KEY.attempt + userId); }
@@ -221,7 +221,7 @@ var Store = (function () {
       teacherId: exam.createdBy, passingPercent: exam.passingPercent,
       userId: user.id, userName: user.name, userEmail: user.email, roll: user.roll,
       answers: attempt.answers,
-      questions: exam.questions, // snapshot: exam delete ho jaye tab bhi scorecard dikhe
+      questions: exam.questions, // Keep a snapshot so the scorecard remains available if the exam is deleted.
       score: score, total: total, percentage: pct,
       passed: status === 'PASSED', status: status,
       timeTaken: Math.max(0, Math.round((endedAt - attempt.startedAt) / 1000)),

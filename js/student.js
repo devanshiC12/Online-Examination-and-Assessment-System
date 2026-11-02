@@ -42,7 +42,7 @@
     var box = $('studentExamsContainer');
     if (!exams.length) {
       box.innerHTML = '<div class="empty-state" style="grid-column:1/-1;"><div class="empty-state-icon">📭</div>' +
-        '<h3>No assessments found</h3><p>Koi exam match nahi hua. Search ya filter badal ke dekho.</p></div>';
+        '<h3>No assessments found</h3><p>No exams matched. Try changing your search or filter.</p></div>';
       return;
     }
 
@@ -82,10 +82,10 @@
 
   $('launchExamBtn').addEventListener('click', function () {
     var exam = Store.getExam(selectedExamId);
-    if (!exam) return UI.toast('Exam ab available nahi hai.', 'error');
-    if (Store.hasAttempted(user.id, exam.id)) return UI.toast('Aap ye exam pehle de chuke ho.', 'warning');
+    if (!exam) return UI.toast('This exam is no longer available.', 'error');
+    if (Store.hasAttempted(user.id, exam.id)) return UI.toast('You have already taken this exam.', 'warning');
 
-    // Kisi aur exam ka adhura attempt ho to naya shuru (same exam ho to resume)
+    // Start a new attempt if the unfinished attempt is for a different exam; resume the same exam.
     var existing = Store.getAttempt(user.id);
     if (!existing || existing.examId !== exam.id) Store.startAttempt(exam, user);
     Store.go('exam.html?id=' + encodeURIComponent(exam.id));
@@ -97,7 +97,7 @@
     var body = $('studentHistoryTableBody');
     if (!rows.length) {
       body.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="empty-state-icon">🗂️</div>' +
-        '<h3>No history yet</h3><p>Pehla exam dene ke baad scorecard yahan dikhega.</p></div></td></tr>';
+        '<h3>No history yet</h3><p>Your scorecard will appear here after you take your first exam.</p></div></td></tr>';
       return;
     }
     body.innerHTML = rows.map(function (r) {

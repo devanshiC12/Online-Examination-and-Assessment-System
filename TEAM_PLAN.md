@@ -1,77 +1,77 @@
-# 👥 TEAM PLAN — Branch-wise kaam ka batwara
+# 👥 TEAM PLAN — Branch-wise Work Allocation
 
-Repo me 5 branches hain, to 5 log. **Har branch ke apne files hain, isliye kisi ka kisi se merge-conflict nahi aayega.**
+The repository has 5 branches for 5 team members. **Each branch has its own files, so there should be no merge conflicts between team members.**
 
-| # | Branch | Kaun karega | Files (sirf yehi touch karna) |
-|---|--------|-------------|-------------------------------|
+| # | Branch | Owner | Files (work only on these) |
+|---|--------|-------|----------------------------|
 | 1 | `dev` | Team Lead / Member 1 | `js/store.js`, `js/ui.js`, `README.md`, `.gitignore` |
 | 2 | `feature/login` | Member 2 | `index.html`, `login.html`, `student-dashboard.html`, `js/auth.js`, `js/student.js`, `style.css`, `dashboard.css` |
 | 3 | `feature/teacher-dashboard-ui` | Member 3 | `teacher-dashboard.html`, `js/teacher.js`, `dashboard.css` |
 | 4 | `feature/examDashboard` | Member 4 | `exam.html`, `exam.css`, `js/exam.js` |
 | 5 | `feature/result-page` | Member 5 | `result.html`, `result.css`, `js/result.js`, `js/teacher-results.js` |
 
-> ⚠️ `style.css` / `dashboard.css` / `exam.css` / `result.css` me **koi change mat karna** (ya karna ho to pehle group me batao) — warna conflict aayega.
+> ⚠️ **Do not change** `style.css` / `dashboard.css` / `exam.css` / `result.css` (or discuss it with the group first) — otherwise, conflicts may occur.
 
 ---
 
-## Kaam ka vivaran (kis branch me kya hai)
+## Work details (what each branch includes)
 
-### 1) `dev` — Data layer (sabse pehle ye merge hoga)
-- `js/store.js`: users, exams, results ka localStorage database, register/login/session, `requireRole()` page-guard, exam create/delete, **auto evaluation (`submitAttempt`)**, CSV generator, demo seed data.
-- `js/ui.js`: toast, modal open/close, navbar (name + role + logout), date/time formatters.
+### 1) `dev` — Data layer (merge this first)
+- `js/store.js`: localStorage database for users, exams, and results; registration/login/session; `requireRole()` page guard; create/delete exams; **automatic evaluation (`submitAttempt`)**; CSV generator; demo seed data.
+- `js/ui.js`: toast notifications, modal open/close, navbar (name + role + logout), date/time formatters.
 - `README.md`, `.gitignore`.
 
 ### 2) `feature/login`
 - `index.html`: landing page (fixed links + Login/Dashboard button).
-- `login.html` + `js/auth.js`: Login / Register tabs, role select (student ke liye roll no.), demo-fill buttons, validation errors.
+- `login.html` + `js/auth.js`: Login / Register tabs, role selection (students provide a roll number), demo-fill buttons, validation errors.
 - `student-dashboard.html` + `js/student.js`: metrics, available exams (search + category filter), lobby modal, history table.
 
 ### 3) `feature/teacher-dashboard-ui`
 - `teacher-dashboard.html` + `js/teacher.js`: tabs, exam cards, search/filter, **Create Assessment modal + dynamic question builder** (4 options, correct answer, marks, explanation), View Questions modal, delete exam.
 
 ### 4) `feature/examDashboard`
-- `exam.html` + `js/exam.js`: countdown timer (refresh par reset nahi hota), question palette (5 statuses), mark-for-review, clear response, auto-save, confirm-submit modal, **anti-cheat strikes (tab switch / blur, 3 strikes = disqualify)**, copy/paste/right-click block, fullscreen, auto-submit on time-up.
+- `exam.html` + `js/exam.js`: countdown timer (does not reset on refresh), question palette (5 statuses), mark-for-review, clear response, auto-save, confirm-submit modal, **anti-cheat strikes (tab switch / blur, 3 strikes = disqualification)**, copy/paste/right-click blocking, fullscreen, auto-submit when time expires.
 
 ### 5) `feature/result-page`
 - `result.html` + `js/result.js`: scorecard (score, %, time, strikes, status), question-by-question review (correct / wrong / skipped + explanation), print / save PDF, access check.
-- `js/teacher-results.js`: teacher ka **Results & Analytics tab** — table, avg score, pass rate, **CSV export**.
+- `js/teacher-results.js`: teacher's **Results & Analytics tab** — table, average score, pass rate, **CSV export**.
 
 ---
 
-## ▶️ Git steps (har member ke liye)
+## ▶️ Git steps (for each team member)
 
-**Order:** pehle `dev` push hoga → phir baaki 4 log apni branch me `dev` merge karke kaam push karenge → PR to `dev` → last me `dev` → `main`.
+**Order:** push `dev` first → the other 4 members merge `dev` into their own branches, then push their work → create PRs to `dev` → finally create a PR from `dev` to `main`.
 
-### Member 1 (dev)
+### Member 1 (`dev`)
 ```bash
 git clone https://github.com/devanshiC12/Online-Examination-and-Assessment-System.git
 cd Online-Examination-and-Assessment-System
 git checkout dev
-# apne files `branches/dev/` se copy karo, phir:
+# Copy your files from `branches/dev/`, then:
 git add js/store.js        && git commit -m "feat(store): add localStorage data layer with seed data"
 git add js/ui.js           && git commit -m "feat(ui): add toast, modal and navbar helpers"
 git add README.md .gitignore && git commit -m "docs: add README and gitignore"
 git push origin dev
 ```
-Push hone ke baad group me bol do: **"dev ready ✅"**
+After pushing, let the group know: **"dev ready ✅"**
 
-### Member 2–5 (apni branch ke naam se)
+### Members 2–5 (use your branch name)
 ```bash
 git clone https://github.com/devanshiC12/Online-Examination-and-Assessment-System.git
 cd Online-Examination-and-Assessment-System
-git checkout feature/login            # <- apni branch
-git merge origin/dev                  # store.js + ui.js aa jayenge
-# apne files `branches/<apni-branch>/` se copy karo (same folder structure me)
-git add <file>  &&  git commit -m "<message>"     # neeche suggested commits dekho
+git checkout feature/login            # <- your branch
+git merge origin/dev                  # store.js + ui.js will be included
+# Copy your files from `branches/<your-branch>/` (preserving the same folder structure)
+git add <file>  &&  git commit -m "<message>"     # see the suggested commits below
 git push origin feature/login
 ```
-Phir GitHub par **Pull Request → base: `dev`** banao. Sab ke PR merge hone ke baad `dev → main` ka PR.
+Then create a **Pull Request → base: `dev`** on GitHub. After all PRs are merged, create a PR from `dev` to `main`.
 
-> Agar branch purani files rakhe (e.g. `README.md` conflict), to `git merge origin/dev` ke baad conflict aaye to **dev wala README rakho**.
+> If your branch has older files (e.g. a `README.md` conflict), keep the **README from `dev`** after merging `origin/dev`.
 
 ---
 
-## 📝 Suggested commits (taaki sabka apna-apna commit history bane)
+## 📝 Suggested commits (to give everyone their own commit history)
 
 **Member 2 — `feature/login`**
 1. `feat(landing): fix links and add login button` → `index.html`
@@ -83,7 +83,7 @@ Phir GitHub par **Pull Request → base: `dev`** banao. Sab ke PR merge hone ke 
 **Member 3 — `feature/teacher-dashboard-ui`**
 1. `feat(teacher): wire dashboard ids and scripts` → `teacher-dashboard.html`
 2. `feat(teacher): tabs, exam cards, search and category filter` → `js/teacher.js`
-   *(chaho to teacher.js ko 2–3 hisson me todke alag commits bhi kar sakte ho: list/filter, question builder, save/delete)*
+   *(You can also split teacher.js into 2–3 commits: list/filter, question builder, save/delete.)*
 
 **Member 4 — `feature/examDashboard`**
 1. `feat(exam): add ids, data-attrs and scripts to exam room` → `exam.html`
@@ -97,7 +97,7 @@ Phir GitHub par **Pull Request → base: `dev`** banao. Sab ke PR merge hone ke 
 
 ---
 
-## ✅ Final check (sab merge hone ke baad)
-1. `teacher@demo.com / teacher123` se login → naya exam banao.
-2. Naya student register karo → exam do (tab switch karke strike bhi check karo).
-3. Result page dekho → teacher login karke Results tab + CSV export check karo.
+## ✅ Final check (after everything is merged)
+1. Log in with `teacher@demo.com / teacher123` → create a new exam.
+2. Register a new student → take the exam (also test a strike by switching tabs).
+3. Open the results page → log in as a teacher and check the Results tab + CSV export.

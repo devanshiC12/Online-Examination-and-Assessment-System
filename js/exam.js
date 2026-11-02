@@ -1,6 +1,6 @@
 /* ==========================================================================
    exam.js — exam.html (proctored exam room)
-   Timer (refresh par reset nahi), question palette, mark-for-review,
+   Timer (does not reset on refresh), question palette, mark-for-review,
    auto-save, anti-cheat strikes, auto-submit
    ========================================================================== */
 (function () {
@@ -16,13 +16,13 @@
   var examId = new URLSearchParams(window.location.search).get('id');
   var exam = Store.getExam(examId);
   if (!exam) {
-    UI.toast('Exam nahi mila.', 'error');
+    UI.toast('Exam not found.', 'error');
     setTimeout(function () { Store.go('student-dashboard.html'); }, 800);
     return;
   }
   if (Store.hasAttempted(user.id, exam.id)) { Store.go('student-dashboard.html'); return; }
 
-  // Adhura attempt ho to resume, warna naya
+  // Resume an unfinished attempt, or start a new one.
   var attempt = Store.getAttempt(user.id);
   if (!attempt || attempt.examId !== exam.id) attempt = Store.startAttempt(exam, user);
 
@@ -131,7 +131,7 @@
     wrap.classList.toggle('timer-warning', s > 60 && s <= 300);
 
     if (remaining <= 0) {
-      UI.toast('Time khatam! Exam auto-submit ho raha hai.', 'warning');
+      UI.toast('Time is up! The exam is being submitted automatically.', 'warning');
       finish('time');
     }
   }
@@ -165,7 +165,7 @@
   function strike(reason) {
     if (finished) return;
     var now = Date.now();
-    if (now - lastStrikeAt < 1500) return; // tab switch par blur + visibilitychange dono fire hote hain
+    if (now - lastStrikeAt < 1500) return; // A tab switch triggers both blur and visibilitychange.
     lastStrikeAt = now;
 
     attempt.strikes++;
@@ -173,7 +173,7 @@
     updateStrikeBadge();
 
     if (attempt.strikes >= MAX_STRIKES) {
-      UI.toast('3 strikes! Aap disqualify ho gaye.', 'error');
+      UI.toast('You have received 3 strikes and have been disqualified.', 'error');
       finish('disqualified');
       return;
     }
@@ -183,12 +183,12 @@
   }
 
   document.addEventListener('visibilitychange', function () { if (document.hidden) strike('Tab switch detected!'); });
-  window.addEventListener('blur', function () { strike('Exam window ka focus chala gaya!'); });
+  window.addEventListener('blur', function () { strike('The exam window has lost focus!'); });
   $('strikeAckBtn').addEventListener('click', function () { UI.closeModal('strikeWarningModal'); });
 
   // Copy / paste / right-click block
   ['copy', 'cut', 'paste'].forEach(function (type) {
-    document.addEventListener(type, function (e) { e.preventDefault(); UI.toast('Copy/Paste exam me allowed nahi hai.', 'warning'); });
+    document.addEventListener(type, function (e) { e.preventDefault(); UI.toast('Copying and pasting are not allowed during the exam.', 'warning'); });
   });
   document.addEventListener('contextmenu', function (e) { e.preventDefault(); });
   document.addEventListener('keydown', function (e) {

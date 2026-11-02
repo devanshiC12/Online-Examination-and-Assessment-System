@@ -33,12 +33,17 @@ var Store = (function () {
 
   /* ---------- seed (pehli baar demo data) ---------- */
   function seed() {
-    if (read(KEY.users, null)) return;
-    write(KEY.users, [
+    var users = read(KEY.users, []);
+    if (!Array.isArray(users)) users = [];
+    [
       { id: 'u_teacher_demo', name: 'Demo Teacher', email: 'teacher@demo.com', role: 'teacher', roll: '', password: hash('teacher123') },
       { id: 'u_student_demo', name: 'Demo Student', email: 'student@demo.com', role: 'student', roll: 'CS2024001', password: hash('student123') }
-    ]);
-    write(KEY.exams, [
+    ].forEach(function (demoUser) {
+      if (!users.some(function (user) { return user.email === demoUser.email; })) users.push(demoUser);
+    });
+    write(KEY.users, users);
+
+    if (!read(KEY.exams, null)) write(KEY.exams, [
       {
         id: 'ex_html_css', title: 'HTML & CSS Fundamentals', category: 'Web Development',
         duration: 10, passingPercent: 60,
@@ -66,7 +71,7 @@ var Store = (function () {
         ]
       }
     ]);
-    write(KEY.results, []);
+    if (!read(KEY.results, null)) write(KEY.results, []);
   }
 
   /* ---------- users & session ---------- */

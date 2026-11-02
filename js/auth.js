@@ -29,13 +29,17 @@
   tabRegister.addEventListener('click', function () { showTab('register'); });
   if (new URLSearchParams(window.location.search).get('mode') === 'register') showTab('register');
 
-  // Demo accounts auto-fill
-  $('fillStudent').addEventListener('click', function () {
-    $('loginEmail').value = 'student@demo.com'; $('loginPassword').value = 'student123'; clearError();
-  });
-  $('fillTeacher').addEventListener('click', function () {
-    $('loginEmail').value = 'teacher@demo.com'; $('loginPassword').value = 'teacher123'; clearError();
-  });
+  function setupPasswordToggle(inputId, buttonId) {
+    var input = $(inputId), button = $(buttonId);
+    button.addEventListener('click', function () {
+      var isVisible = input.type === 'text';
+      input.type = isVisible ? 'password' : 'text';
+      button.textContent = isVisible ? 'Show' : 'Hide';
+      button.setAttribute('aria-pressed', String(!isVisible));
+    });
+  }
+  setupPasswordToggle('loginPassword', 'toggleLoginPassword');
+  setupPasswordToggle('regPassword', 'toggleRegPassword');
 
   // Teachers do not need a roll number.
   function toggleRoll() { $('rollGroup').style.display = $('regRole').value === 'student' ? '' : 'none'; }
